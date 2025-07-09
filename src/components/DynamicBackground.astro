@@ -77,7 +77,6 @@
     const offsetLerpFactor = 0.05;
     const offsetScale = -0.03;
 
-    // --- Cached container dimensions ---
     let cachedContainerRect = { width: 0, height: 0, left: 0, top: 0 };
     let needsRectUpdate = true;
 
@@ -94,8 +93,7 @@
       }
     }
 
-    // --- FPS Monitoring & Performance Adjustment ---
-    const initialLevel = isMobileDevice ? 1 : 3; // Mobile starts at lowest, others default to Medium
+    const initialLevel = isMobileDevice ? 1 : 3;
     let currentPerformanceLevel = initialLevel;
     const fpsHistory: number[] = [];
     const maxFpsHistoryLength = 60;
@@ -314,7 +312,6 @@
           const shuffledColors = shuffleArray(availableColors);
           initialBlobColorsHex = [];
           for (let i = 0; i < config.numBlobs; i++) {
-            // Repeat colors if the scheme has fewer than numBlobs
             initialBlobColorsHex.push(
               shuffledColors[i % shuffledColors.length]
             );
@@ -327,9 +324,7 @@
           }
         }
       }
-      // --- CHANGES END HERE --- Select ONE random color scheme ---
 
-      // --- Create Blobs: Large ones first (bottom layer) ---
       const largeBlobCount = Math.ceil(config.numBlobs / 2);
       for (let i = 0; i < largeBlobCount; i++) {
         createSingleBlob(
@@ -342,20 +337,18 @@
         );
       }
 
-      // --- Create Blobs: Small ones second (top layer) ---
       for (let i = largeBlobCount; i < config.numBlobs; i++) {
         createSingleBlob(
           i,
           currentSmallMinSize,
           currentSmallMaxSize,
-          initialBlobColorsHex[i % initialBlobColorsHex.length], // Use modulo just in case numBlobs isn't even
+          initialBlobColorsHex[i % initialBlobColorsHex.length],
           containerWidth,
           containerHeight
         );
       }
     }
 
-    // --- Refactored Blob Creation Logic ---
     function createSingleBlob(
       blobIndex: number,
       minSize: number,
@@ -366,24 +359,18 @@
     ) {
       const radius = random(minSize / 2, maxSize / 2);
 
-      // Find position - REMOVED overlap check, just place randomly
       const position: Vector = {
-        // Directly assign random position
         x: random(radius, containerWidth - radius),
         y: random(radius, containerHeight - radius),
       };
 
-      // Get initial color from the combined list
       const initialHsl = hexToHsl(initialHex);
       if (!initialHsl) {
         console.error(
           `Invalid initial hex color: ${initialHex}. Skipping blob ${blobIndex}.`
         );
-        // return; // Let the loop continue, maybe handle differently
-        // For now, we'll let it proceed but log the error
       }
 
-      // Create blob properties - Modified call to createBlobPoints
       const initialGeometry = createBlobPoints(0, 0, radius, 0.3, 0.2, 8);
       const pathData = createPathString(initialGeometry.points);
       const velocity: Vector = {
@@ -393,61 +380,54 @@
       const initialAngle = random(0, 360);
       const angularVelocity = random(-0.15, 0.15);
 
-      // Create SVG element
       const pathElement = document.createElementNS(svgNS, "path");
       pathElement.setAttribute("d", pathData);
-      // Only set fill if HSL conversion was successful
       if (initialHsl) {
         pathElement.setAttribute("fill", initialHex);
       } else {
-        pathElement.setAttribute("fill", "#808080"); // Fallback grey if color invalid
+        pathElement.setAttribute("fill", "#808080");
       }
       pathElement.setAttribute(
         "transform",
         `translate(${position.x}, ${position.y}) rotate(${initialAngle})`
       );
       pathElement.style.opacity = String(config.opacity);
-      svgGroup!.appendChild(pathElement); // Add to SVG group HERE
+      svgGroup!.appendChild(pathElement);
 
-      // Create Blob object - Added deformation properties
       const blob: BlobShape = {
         id: blobIndex,
         pathElement,
         position: position,
         velocity,
-        radius, // Keep average radius for collision/interaction
-        color: initialHex, // Store original hex regardless of validity for potential future use
-        hsl: initialHsl || { h: 0, s: 0, l: 50 }, // Use fallback HSL if invalid
-        points: initialGeometry.points, // Initial points for reference?
+        radius,
+        color: initialHex,
+        hsl: initialHsl || { h: 0, s: 0, l: 50 },
+        points: initialGeometry.points,
         angle: initialAngle,
         angularVelocity: angularVelocity,
         baseAngles: initialGeometry.angles,
         baseRadii: initialGeometry.radii,
         deformationTime: 0,
-        deformationSpeed: random(0.005, 0.015), // Slower speed for subtle change
-        deformationAmplitude: radius * random(0.05, 0.15), // Amplitude relative to size
+        deformationSpeed: random(0.005, 0.015),
+        deformationAmplitude: radius * random(0.05, 0.15),
         update: function (
           mousePos: Vector | null,
           allBlobs: BlobShape[],
           containerWidth: number,
           containerHeight: number
         ) {
-          // Increment deformation time
           this.deformationTime += 1;
 
-          // Cache previous position and angle for comparison
           const prevX = this.position.x;
           const prevY = this.position.y;
           const prevAngle = this.angle;
 
-          // Only recalculate points and path if shape changing is enabled
           if (config.enableShapeChanging) {
             const currentPoints: Vector[] = [];
             const numBasePoints = this.baseAngles.length;
             for (let j = 0; j < numBasePoints; j++) {
               const angle = this.baseAngles[j];
               const baseRadius = this.baseRadii[j];
-              // Calculate radius offset using sine wave based on time and angle
               const radiusOffset =
                 Math.sin(
                   this.deformationTime * this.deformationSpeed + angle * 3
@@ -455,51 +435,38 @@
               const currentRadius = Math.max(
                 baseRadius * 0.3,
                 baseRadius + radiusOffset
-              ); // Ensure min radius
-
-              // Calculate point coordinates relative to (0,0)
+              );
               const x = Math.cos(angle) * currentRadius;
               const y = Math.sin(angle) * currentRadius;
               currentPoints.push({ x, y });
             }
-
-            // Update the path definition (d attribute) only when shape changes
             const newPathData = createPathString(currentPoints);
             this.pathElement.setAttribute("d", newPathData);
           }
-          // If shape changing is disabled, we assume the initial 'd' attribute set during creation is sufficient
-          // and only the transform needs updating later.
 
-          // --- Update position based on velocity ---
           this.position.x += this.velocity.x;
           this.position.y += this.velocity.y;
 
-          // --- Update angle based on angular velocity ---
           this.angle += this.angularVelocity;
 
-          // --- Mouse interaction ---
           if (config.enableMouseInteraction && mousePos) {
             const dx = this.position.x - mousePos.x;
             const dy = this.position.y - mousePos.y;
             const distSquared = dx * dx + dy * dy;
-
-            // Use a slightly larger radius for interaction check
             const influenceDist =
               config.mouseInfluenceRadius + this.radius * 1.2;
             const influenceDistSquared = influenceDist * influenceDist;
 
             if (distSquared < influenceDistSquared && distSquared > 0) {
-              const dist = Math.sqrt(distSquared); // Only calculate sqrt when interaction is active
-              // Modify force calculation for stronger effect when closer
-              const force = ((influenceDist - dist) / influenceDist) ** 1.5; // Added exponent
+              const dist = Math.sqrt(distSquared);
+              const force = ((influenceDist - dist) / influenceDist) ** 1.5;
               const angle = Math.atan2(dy, dx);
-              // Apply force gently
               this.velocity.x +=
                 Math.cos(angle) *
                 force *
                 config.mouseForce *
                 config.speedMultiplier *
-                5; // Scale force with speedMultiplier
+                5;
               this.velocity.y +=
                 Math.sin(angle) *
                 force *
@@ -509,9 +476,8 @@
             }
           }
 
-          // --- Apply velocity limit & damping ---
           const speed = Math.sqrt(this.velocity.x ** 2 + this.velocity.y ** 2);
-          const maxSpeed = 1.5 * config.speedMultiplier; // Limit speed relative to multiplier
+          const maxSpeed = 1.5 * config.speedMultiplier;
           if (speed > maxSpeed) {
             this.velocity.x *= maxSpeed / speed;
             this.velocity.y *= maxSpeed / speed;
@@ -519,7 +485,6 @@
           this.velocity.x *= 0.99;
           this.velocity.y *= 0.99;
 
-          // --- Collision detection and response ---
           if (config.enableCollisionDetection) {
             const collisionPushForce = 0.01;
             for (const otherBlob of allBlobs) {
@@ -527,36 +492,24 @@
 
               const dx = otherBlob.position.x - this.position.x;
               const dy = otherBlob.position.y - this.position.y;
-              const distSquared = dx * dx + dy * dy; // Use squared distance to avoid sqrt
-              const minDist = (this.radius + otherBlob.radius) * 0.5; // Allow some overlap
+              const distSquared = dx * dx + dy * dy;
+              const minDist = (this.radius + otherBlob.radius) * 0.5;
               const minDistSquared = minDist * minDist;
 
               if (distSquared < minDistSquared && distSquared > 0) {
-                const dist = Math.sqrt(distSquared); // Only calculate sqrt when collision detected
+                const dist = Math.sqrt(distSquared);
                 const overlap = minDist - dist;
                 const angle = Math.atan2(dy, dx);
-                // Calculate push force - stronger for more overlap
                 const pushX = Math.cos(angle) * overlap * collisionPushForce;
                 const pushY = Math.sin(angle) * overlap * collisionPushForce;
-
-                // Apply force to both blobs (pushing them apart)
-                // We apply force by adjusting velocity
                 this.velocity.x -= pushX;
                 this.velocity.y -= pushY;
-                // The other blob will calculate its own push in its update cycle
-                // For a more physically accurate simulation, you might apply half the force here
-                // and half when the other blob checks against this one, or apply full force
-                // to both but be mindful of potential instability.
-                // Let's try applying the push only to 'this' blob first, as the effect
-                // might be sufficient and simpler.
               }
             }
           }
 
-          // Boundary collision
           const width = containerWidth;
           const height = containerHeight;
-          // Use a simpler boundary check, push back gently
           const pushForce = 0.05 * config.speedMultiplier;
           if (this.position.x < this.radius) {
             this.velocity.x += pushForce;
@@ -570,7 +523,6 @@
           if (this.position.y > height - this.radius) {
             this.velocity.y -= pushForce;
           }
-          // Clamp position to prevent escaping completely during fast mouse moves or collisions
           this.position.x = Math.max(
             this.radius / 2,
             Math.min(width - this.radius / 2, this.position.x)
@@ -580,14 +532,12 @@
             Math.min(height - this.radius / 2, this.position.y)
           );
 
-          // --- Conditional Transform Update for Static Blobs ---
-          const staticThreshold = 0.01; // Adjust threshold as needed
+          const staticThreshold = 0.01;
           const isStatic =
             Math.abs(this.velocity.x) < staticThreshold &&
             Math.abs(this.velocity.y) < staticThreshold &&
             Math.abs(this.angularVelocity) < staticThreshold;
 
-          // Only update transform if position or angle changed significantly
           const positionChanged =
             Math.abs(this.position.x - prevX) > 0.1 ||
             Math.abs(this.position.y - prevY) > 0.1;
@@ -601,35 +551,22 @@
           }
         },
       };
-      blobs.push(blob); // Add blob object to the array AFTER creating the SVG element
+      blobs.push(blob);
     }
 
-    // --- Animation Loop ---
     function animate(timestamp: number) {
-      // Always request the next frame
       requestAnimationFrame(animate);
 
-      // Throttle logic updates to ~60 FPS
       const elapsedSinceLastExecution = timestamp - lastLogicExecutionTime;
       if (elapsedSinceLastExecution < targetFrameInterval) {
-        return; // Skip logic if not enough time has passed
+        return;
       }
       lastLogicExecutionTime =
         timestamp - (elapsedSinceLastExecution % targetFrameInterval);
 
-      // --- Now execute the throttled logic ---
       const deltaTime = timestamp - lastTimestamp;
       lastTimestamp = timestamp;
 
-      // REMOVED Check if svgGroup still exists before proceeding
-      /*
-      if (!svgGroup || svgGroup.children.length === 0) {
-          console.error('[DynamicBackground] svgGroup missing or empty in animate loop! Aborting frame.');
-          return; 
-      }
-      */
-
-      // FPS Calculation and Mode Switching (only if not initially mobile)
       if (!isMobileDevice && deltaTime > 0) {
         const currentFps = 1000 / deltaTime;
         fpsHistory.push(currentFps);
@@ -642,19 +579,16 @@
             fpsHistory.reduce((a, b) => a + b, 0) / maxFpsHistoryLength;
           let targetLevel = currentPerformanceLevel;
 
-          // Determine target level based on FPS
           if (avgFps < level1_MaxFps) targetLevel = 1;
           else if (avgFps < level2_MaxFps) targetLevel = 2;
           else if (avgFps < level3_MaxFps) targetLevel = 3;
           else targetLevel = 4;
 
-          // Hysteresis Logic
           if (targetLevel === currentPerformanceLevel) {
             framesInCurrentRange = 0;
           } else {
             let shouldSwitch = false;
             if (targetLevel > currentPerformanceLevel) {
-              // Moving UP
               if (currentPerformanceLevel === 1 && avgFps >= level1_RecoveryFps)
                 shouldSwitch = true;
               else if (
@@ -665,7 +599,6 @@
               else if (currentPerformanceLevel === 3 && avgFps >= level4_MinFps)
                 shouldSwitch = true;
             } else {
-              // Moving DOWN
               if (currentPerformanceLevel === 4 && avgFps < level4_DegradeFps)
                 shouldSwitch = true;
               else if (currentPerformanceLevel === 3 && avgFps < level2_MaxFps)
@@ -684,17 +617,13 @@
               framesInCurrentRange = 0;
             }
           }
-          // Re-comment the FPS log
-          // console.log(`Avg FPS: ${avgFps.toFixed(1)}, Level: ${currentPerformanceLevel}`);
         }
       }
 
-      // --- Existing Animation Logic ---
-      updateCachedRect(); // Ensure we have current dimensions
+      updateCachedRect();
       const containerWidth = cachedContainerRect.width;
       const containerHeight = cachedContainerRect.height;
 
-      // Update Background Offset
       if (svgGroup) {
         currentOffset.x +=
           (targetOffset.x - currentOffset.x) * offsetLerpFactor;
@@ -706,40 +635,30 @@
         );
       }
 
-      // Update individual blobs, passing dimensions
       blobs.forEach((blob) =>
         blob.update(mousePos, blobs, containerWidth, containerHeight)
       );
     }
 
-    // --- Event Listeners ---
     let mouseThrottleTimeout: number | null = null;
 
-    // Add resize event listener to invalidate cached rect
     window.addEventListener("resize", () => {
       needsRectUpdate = true;
     });
 
     window.addEventListener("mousemove", (event) => {
       if (config.enableMouseInteraction) {
-        // Cancel previous throttled call if exists
         if (mouseThrottleTimeout) {
           cancelAnimationFrame(mouseThrottleTimeout);
         }
-
-        // Throttle mouse position updates
         mouseThrottleTimeout = requestAnimationFrame(() => {
-          updateCachedRect(); // Update cached rect if needed
+          updateCachedRect();
           const mouseX = event.clientX;
           const mouseY = event.clientY;
-
-          // Update individual blob interaction position using cached rect
           mousePos = {
             x: mouseX - cachedContainerRect.left,
             y: mouseY - cachedContainerRect.top,
           };
-
-          // Update target offset for background movement
           const centerX = window.innerWidth / 2;
           const centerY = window.innerHeight / 2;
           targetOffset.x = (mouseX - centerX) * offsetScale;
@@ -749,29 +668,23 @@
     });
 
     window.addEventListener("mouseleave", () => {
-      // Reset individual blob interaction
       mousePos = null;
-      // Reset target offset for background
       targetOffset.x = 0;
       targetOffset.y = 0;
     });
 
-    // --- Start --- Initialization and start animation ---
     initBlobs();
-    requestAnimationFrame(animate); // Initial call to start the loop
+    requestAnimationFrame(animate);
 
-    // --- Cleanup function to prevent memory leaks ---
     function cleanup() {
       if (mouseThrottleTimeout) {
         cancelAnimationFrame(mouseThrottleTimeout);
         mouseThrottleTimeout = null;
       }
-      // Clear blobs array
       blobs.length = 0;
       mousePos = null;
     }
 
-    // Cleanup on page unload (Astro's view transitions)
     document.addEventListener("astro:before-preparation", cleanup);
     document.addEventListener("beforeunload", cleanup);
   } else {
@@ -792,14 +705,12 @@
     transition: filter 0.3s ease;
   }
 
-  /* Medium screens (e.g., tablets) */
   @media (min-width: 768px) {
     #dynamic-background-container {
       filter: blur(50px);
     }
   }
 
-  /* Large screens (e.g., desktops) */
   @media (min-width: 1024px) {
     #dynamic-background-container {
       filter: blur(80px);
@@ -807,7 +718,7 @@
   }
 
   #dynamic-background-svg {
-    display: block; /* Prevents extra space below SVG */
+    display: block;
   }
 
   @keyframes hue-rotate-anim {
