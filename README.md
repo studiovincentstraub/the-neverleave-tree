@@ -86,6 +86,17 @@ You can customize the website by editing the following:
 - `src/styles/` - Style files
 - `src/data/` - Data files
 
+## Deployment (GitHub Pages)
+
+This repository includes a GitHub Actions workflow at `.github/workflows/deploy-gh-pages.yml` that builds the site and publishes the `dist/` output to the `gh-pages` branch using `peaceiris/actions-gh-pages`.
+
+How it works:
+
+- On every push to `main`, the workflow installs dependencies, runs `npm run build`, and publishes the `dist/` directory to the `gh-pages` branch.
+- To enable GitHub Pages, go to your repository Settings -> Pages and set the source to the `gh-pages` branch and the root (`/`).
+
+If you prefer to publish from `main` `/docs`, you can modify the action to copy `dist/` to `docs/` and publish from `main`.
+
 ## License
 
 This project is licensed under the MIT license specified in the [LICENSE](LICENSE) file.

@@ -34,130 +34,82 @@ function formatEventDate(dateStr: string): string {
   }
 }
 ---
+<h2 slot="title" class="about-title scroll-target-title">III. THE END</h2>
 
-<h2 slot="title" class="about-title scroll-target-title">
-  Highlights & Updates
-</h2>
+<div class="about-content scroll-target-content highlights-container">
+  <p>
+    When will we learn to love?<br />
+    When will we learn to see?
+  </p>
 
-<div class="about-content scroll-target-content">
-  {
-    highlightsToShow.length > 0 ? (
-      <ul class="highlights-list-enhanced">
-        {highlightsToShow.map((event) => (
-          <li class="highlight-item-enhanced">
-            <div class="highlight-meta">
-              <time datetime={event.date} class="highlight-date">
-                {formatEventDate(event.date)}
-              </time>
-            </div>
-            <div class="highlight-body">
-              <h4 class="highlight-title">{event.title}</h4>
-              {event.highlightSummary ? (
-                <p
-                  class="highlight-summary"
-                  set:html={event.highlightSummary}
-                />
-              ) : event.description ? (
-                <div
-                  class="highlight-description"
-                  set:html={event.description}
-                />
-              ) : null}
-            </div>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p>No recent highlights available. Check back soon!</p> // Fallback message
-    )
-  }
+  <p>
+    A few were born with hearts wide open,<br />
+    the others,<br />
+    they choose to love through pain.<br />
+    To be in the woods most hours of the day<br />
+    must have had an impact on you<br />
+    You can see the fine embroidery like crystals<br />
+    Who are you<br />
+    And where<br />
+    Or are you many after all
+  </p>
 
-  <div class="button-group">
-    <Button
-      class="button"
-      href={timelineUrl}
-      text="Explore My Journey"
-      wrapperClass="cta-link"
-    />
-  </div>
+  <p>
+    Can you now fly like a butterfly?<br />
+    just watch a caterpillar move,<br />
+    a pillar of lightheartedness,<br />
+    caressing my tummy<br />
+    navel of the world<br />
+    rest on my navel.
+  </p>
+
+  <p>
+    make me go back, back into sleep<br />
+    or re-enter the universe and become a butterfly
+  </p>
+
+  <p>
+    Or a fleeting star?<br />
+    a one-hit wonder<br />
+    this life, my life<br />
+    possibly an ephemerid?<br />
+    and you, the other one<br />
+    the almost trapped one<br />
+    a pillar in our life’s story
+  </p>
+
+  <p>
+    Where are you<br />
+    my beloved children<br />
+    I gave birth to<br />
+    I am dying of neglect
+  </p>
+
+  <p>
+    Where are you?<br />
+    Children of the forest
+  </p>
+
+  <p>
+    Remember me, this tree:<br />
+    It carries your name in stenciled air and mud.
+  </p>
+
+  <p style="white-space: pre-line;">
+      And when dawn shall come<br />
+      My carved up trunk will be our witness.
+  </p>
 </div>
 
 <style>
-  .highlights-list-enhanced {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 0;
-  }
-
-  .highlight-item-enhanced {
-    margin-bottom: 2.5rem;
-    padding-bottom: 2.5rem;
-    border-bottom: 1px solid var(--theme-divider-color);
-  }
-
-  .highlight-item-enhanced:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-  }
-
-  .highlight-meta {
-    margin-bottom: 0.5rem;
-  }
-
-  .highlight-date {
-    font-family: var(--font-family-sans);
-    font-size: 0.9rem;
-    line-height: 1.6;
+  .highlights-container {
     display: block;
+    gap: 1.5rem;
   }
 
-  .highlight-body p {
-    margin: 0;
-  }
-
-  .highlight-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0 0 0.5rem 0;
-    line-height: 1.5;
-  }
-
-  .highlight-summary,
-  .highlight-description p {
-    font-size: 1rem;
-    color: var(--theme-text);
-    margin: 0;
-    line-height: 1.7;
-  }
-
-  .highlight-description {
-    margin: 0;
-  }
-  .highlight-description ul {
-    padding-left: 1.2em;
-    margin-top: 0.5em;
-    list-style: disc;
-  }
-  .button-group {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  @media (min-width: 640px) {
-    .highlight-item-enhanced {
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    .highlight-meta {
-      flex: 0 0 80px;
-      margin-bottom: 0;
-    }
-
-    .highlight-body {
-      flex: 1 1 auto;
-    }
+  .highlights-container p {
+    margin-bottom: 1rem;
+    font-size: clamp(1rem, 1rem + 0.6vw, 1.125rem);
+    line-height: 1.6;
   }
 </style>

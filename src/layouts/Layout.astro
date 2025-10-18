@@ -2,7 +2,6 @@
 import { ClientRouter } from "astro:transitions";
 import DynamicBackground from "../components/DynamicBackground.astro";
 import ScrollIndicator from "../components/ScrollIndicator.astro";
-import Footer from "../components/Footer.astro";
 
 interface Props {
   title?: string;
@@ -127,6 +126,9 @@ const showScrollIndicator =
         transition:
           background-color 0.3s ease,
           color 0.3s ease;
+        /* increase base font size (adjust px as needed) */
+        font-size: 14px;
+        line-height: 1.5;
       }
 
       .page-wrapper {
@@ -353,9 +355,8 @@ const showScrollIndicator =
       <main class="main-content">
         <slot />
       </main>
-      <div class="some-empty-space" style="height: 20vh;"></div>
-      <Footer />
-      {showScrollIndicator && <ScrollIndicator />}
+  <div class="some-empty-space" style="height: 10vh;"></div>
+  {showScrollIndicator && <ScrollIndicator />}
     </div>
   </body>
 </html>

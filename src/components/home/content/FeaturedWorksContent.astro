@@ -23,49 +23,102 @@ function slugify(text: string): string {
 }
 ---
 
-<h2 slot="title" class="about-title scroll-target-title">Featured Works</h2>
+<h2 slot="title" class="about-title scroll-target-title">II. IN BETWEEN</h2>
 
 <div class="about-content scroll-target-content featured-works-container">
-  {
-    featuredProjects.map((project) => {
-      const slug = slugify(project.title);
-      return (
-        <FeaturedProjectCard
-          title={project.title}
-          homepageSummary={project.homepageSummary}
-          imageAlt={project.imageAlt}
-          githubUrl={project.githubUrl}
-          slug={slug}
-        />
-      );
-    })
-  }
+  <p>
+    In this other life, I see things<br />
+    I could never see.
+  </p>
 
-  <div class="button-group">
-    <Button
-      class="button"
-      href={projectsUrl}
-      text="Discover More Projects"
-      wrapperClass="projects-cta-button"
-    />
-  </div>
+  <p>
+    We, who name ourselves<br />
+    name others, name them<br />
+    the standing ones<br />
+    the ones who cannot, should not be<br />
+    uprooted for their roots reach down<br />
+    we, who name to understand<br />
+    and alienate
+  </p>
+
+  <p>
+    But they, more connected than we’ll ever be<br />
+    to the ground below and skies above<br />
+    in their greatness<br />
+    a shy sensitivity revealed by the tacit trembling<br />
+    of the poplar<br />
+    to let us know “I’m here”<br />
+    if only we, in seeking connection were to<br />
+    watch and listen<br />
+    to the forest’s song.
+  </p>
+
+  <p>
+    Listen to the rustling sound,<br />
+    Gentle, as someone shifting air,<br />
+    or is it paper?<br />
+    No, it is the sound of being trapped,<br />
+    of someone with fine legs,<br />
+    legs to bend and jump high<br />
+    a little grasshopper caught in my bedroom lace<br />
+    carpet hopper, poor thing
+  </p>
+
+  <p>
+    I catch him quick, hold him inside my hand<br />
+    let him be free
+  </p>
+
+  <p>
+    how quickly lives can end<br />
+    if no one is there to care
+  </p>
+
+  <p>
+    Ever since this gesture of mine, this in-between<br />
+    time, I have collected tiny notes on grass<br />
+    written with mushroom ink, so now I know<br />
+    there is no life without the Neverleave tree, and<br />
+    grasshopper poems dry quickly in the morning<br />
+    sun
+  </p>
+
+  <p>
+    Lying amidst eagle fern,<br />
+    wings spread—the plant’s and mine—,<br />
+    great oeuvres are spun,<br />
+    palaces and pyramids<br />
+    a mere attempt<br />
+    to be greater than nature, we have removed<br />
+    ourselves<br />
+    becoming blind to the world’s<br />
+    most acclaimed architects
+  </p>
+
+  <p>
+    Queens of their own bodies,<br />
+    illuminated by the morning sun<br />
+    I see the fine embroidery<br />
+    like crystals<br />
+    droplets holding rainbows<br />
+    beauty and order not to be feared
+  </p>
+
+  <p>
+    artistry is woven into the webs of life,<br />
+    each weaver, the creator of their own
+  </p>
 </div>
 
 <style>
   .featured-works-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    display: block;
+    gap: 1.5rem;
   }
 
-  @media (min-width: 696px) {
-    .featured-works-container {
-      width: 100%;
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  .button-group {
-    display: flex;
-    gap: 1rem;
+  .featured-works-container p {
+    margin-bottom: 1rem;
+    font-size: clamp(1rem, 1rem + 0.6vw, 1.125rem);
+    line-height: 1.6;
   }
 </style>

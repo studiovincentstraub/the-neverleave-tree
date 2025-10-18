@@ -5,57 +5,35 @@ import { Icon } from "astro-icon/components";
 const contactUrl = "/contact";
 ---
 
-<h2 slot="title" class="about-title scroll-target-title">Keep in touch</h2>
+<h2 slot="title" class="about-title scroll-target-title">About us</h2>
 
-<div class="about-content scroll-target-content">
+<div class="about-content scroll-target-content connect-content">
   <p>
-    This is the contact section where you can share your professional interests
-    and how others can reach you. Customize this text to describe what you're
-    looking for, whether it's job opportunities, collaborations, or networking.
-  </p>
-  <p>
-    Below are some example contact links. Replace them with your own social
-    media profiles, email, and other relevant contact information.
+    The Neverleave tree was written in collaboration by three voices through passing lines back and forth. It was written during and after the death of a loved person. It is part of the art exhibition <em>Hand/Hand/Haus</em>, which can be seen in autumn 2025 in Essen, Germany in the arts space Crossing.Kunstraum, Lerchenstrasse 40, 45134 Essen. The documentation can be found on the website: <a href="https://claudiasacherart.com/" target="_blank" rel="noopener noreferrer">https://claudiasacherart.com/</a>
   </p>
 
-  <div class="connect-icon-links">
-    <a
-      href="mailto:example@email.com"
-      title="Send me an email"
-      aria-label="Email"
-    >
-      <Icon name="ri:mail-line" size={24} aria-hidden="true" />
-    </a>
-    <a
-      href="https://github.com/example"
-      target="_blank"
-      rel="noopener noreferrer"
-      title="View my GitHub profile"
-      aria-label="GitHub"
-    >
-      <Icon name="ri:github-line" size={22} aria-hidden="true" />
-    </a>
-    <a
-      href="https://linkedin.com/in/example"
-      target="_blank"
-      rel="noopener noreferrer"
-      title="View my LinkedIn profile"
-      aria-label="LinkedIn"
-    >
-      <Icon name="ri:linkedin-box-line" size={22} aria-hidden="true" />
-    </a>
-  </div>
+  <h3>The three voices</h3>
 
-  <div class="button-group">
-    <Button
-      class="button"
-      href={contactUrl}
-      text="See All Contact Info"
-      wrapperClass="cta-link"
-    />
-  </div>
+  <p>
+    Viviane Straub is the daughter of a visual artist and since 2024 also the mother of her own daughter. Having studied Human Ecology, she is interested in finding alternatives to dominant narratives on how we live with the human and more-than-human world and is currently living and working on Gotland; an island in the Baltic Sea. She is a polyglot and plays the clarinet. To make sense of both her internal and external worlds, she writes poetry and short texts; handwritten and without the use of AI.
+  </p>
+
+  <p>
+    Vincent Straub, born in Iowa in 1997, grew up between Germany and England. He studied social sciences, computer-science, and design, and is currently pursuing a PhD in sociology and genetics at the University of Oxford. In addition to his academic work, his wider practice includes poetry, short prose, conceptual art, and video art. Through his research and creative work, he advocates for a healthier, more nurturing embodiment of masculinity. His works have been exhibited by Tate Collective in London and Blikopeners in Amsterdam, among others. He is the son of Claudia Sacher.
+  </p>
+
+ <p>
+    Claudia Sacher is a visual artist working in the medium of drawing, installation and performance. Born in 1966 in Oberhausen (Germany), she gained a diploma in Graphic Design at the Folkwang Universität der Künste in Essen. Her graduation „Das geschnittene Katerbein“ (The Splinted Tomcat’s Leg) was one of the first artistic works at the Zollverein colliery, Zeche Zollverein in Essen/ Germany.
+  </p>
+
+  <p>
+    From 1992–1994, she studied New Performing Arts and Intermedia Design Iowa City, Iowa, USA. She later returned to Essen (Germany) and joined Kunsthaus Essen, a forum for contemporary art, for two years. This was followed by a solo exhibition in Städtische Galerie Museum Folkwang and numerous group exhibitions in Germany. In 2003, Sacher moved to the North East of England where she has exhibited regularly ever since. In the last few years she has been part of the interdisciplinary artist group ‘Stairwall’ with Jeremy Bradfield led by Esther Huss.
+  </p>
+
+  <p>
+    Claudia’s recent more extensive project was Nastya: Indescribably Blows the Sorrow of the River, a concert-performance with the Ukrainian singer Yuliia Sovershenna in Essen/Germany, 2024. Beside her own work she is experienced and passionate in working with people of all abilities and ages who live with mental health or physical issues. She also enjoys working with people who live with dementia.
+  </p>
 </div>
-
 <style>
   p {
     margin-bottom: 1.5rem;
