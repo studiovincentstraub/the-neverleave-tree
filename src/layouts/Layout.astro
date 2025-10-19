@@ -9,7 +9,9 @@ interface Props {
 }
 const { title, showIndicatorOverride } = Astro.props;
 
-const pageTitle = `${title || "The Neverleave tree"} | Studio Vincent Straub`;
+const siteName = "Studio Vincent Straub";
+// If a page provides a title use 'Title | SiteName', otherwise use the homepage title
+const pageTitle = title ? `${title} | ${siteName}` : `The Neverleave tree | ${siteName}`;
 
 const currentPath = Astro.url.pathname;
 const shouldShowBasedOnPath = currentPath === "/";
