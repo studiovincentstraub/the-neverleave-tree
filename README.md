@@ -5,11 +5,11 @@
 
 ## Overview  
 [**The Neverleave Tree**](https://studiovincentstraub-the-neverleave-tree.vercel.app/) is an experimental web-poem,  
-grown within the 2025 **Hand/Hand/Haus** exhibition.  
+it is part of the 2025 **Hand/Hand/Haus** exhibition.  
 
 Three voices move through its branches,  
-their words interlacing across an interactive landscape  
-of language, silence, and light.
+their words interlacing across a landscape  
+of the language and silence of loss.
 
 ---
 
@@ -23,4 +23,5 @@ of language, silence, and light.
 ## Live Demo  
 Experience the poem at:  
 [https://studiovincentstraub-the-neverleave-tree.vercel.app/](https://studiovincentstraub-the-neverleave-tree.vercel.app/)
+
 
